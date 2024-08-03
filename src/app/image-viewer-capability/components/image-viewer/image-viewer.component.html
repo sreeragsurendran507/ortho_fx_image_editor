@@ -1,0 +1,54 @@
+<div class="container-flex">
+    <div class="row justify-content-center align-items-center">
+      <div class="col-auto text-center">
+        <span class="material-icons prev-icon" (click)="previousImage()">chevron_left</span>
+      </div>
+      <div class="col d-flex justify-content-center align-items-center">
+        <div class="main-image-container m-3">
+          <ng-container *ngIf="imagePreviews[currentImageIndex]">
+            <img [src]="imagePreviews[currentImageIndex]" [style.transform]="transformStyle" alt="Main Image" class="img-fluid" appDraggable>
+            <div *ngIf="showGrid" class="grid-overlay"></div>
+          </ng-container>
+        </div>
+      </div>
+      <div class="col-auto text-center">
+        <span class="material-icons next-icon" (click)="nextImage()">chevron_right</span>
+      </div>
+    </div>
+    
+    <div class="row">
+      <div class="col-12 d-flex justify-content-center">
+        <button *ngFor="let action of actions" 
+                mat-icon-button 
+                class="action-button mx-1"
+                (click)="performAction(action)">
+          <span class="material-icons">{{ action.icon }}</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="row mt-3">
+      <div class="col-12">
+        <div class="d-flex justify-content-center">
+          <div *ngFor="let thumbnail of imagePreviews; let i = index"  class="thumbnail_img__container" [ngClass]="{'thumbnail_active': i === currentImageIndex}">
+              <img 
+                  [src]="thumbnail" 
+                  alt="Thumbnail {{i + 1}}" 
+                  class="thumbnail_img mr-3"
+                  (click)="setImage(i)">
+
+            </div>
+            <div class="thumbnail_img__container thumbnail_img" (click)="triggerUploadImage()">
+              <span class="material-icons prev-icon">
+                add_photo_alternate
+                </span>
+           </div>
+        </div>
+        <!--  -->
+      </div>
+    </div>
+
+  </div>
+
+  <input type="file" #uploadImageInput (change)="onFileSelected($event)" accept="image/*" style="display: none;">
+  
