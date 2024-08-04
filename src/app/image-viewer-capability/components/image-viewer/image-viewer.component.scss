@@ -1,31 +1,16 @@
-$theme_color:#43a0b2;
-.main-image-container {
-    width: 500px; /* Fixed width */
-    height: 300px; /* Fixed height */
-    border: 1px solid #ddd;
-    padding: 10px;
-    background-color: #fff;
-    position: relative;
-    overflow: hidden;
-    display: flex;
+$theme_color: #43a0b2;
+
+.image-viewer {
+  overflow: hidden;
+  
+  .image-viewer-section {
+    background-color: #f1f1f1;
     justify-content: center;
     align-items: center;
   }
-  
-  .main-image-container img {
-    transition: transform 0.3s ease; /* Smooth transition for transformations */
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* Ensures the image maintains aspect ratio */
-    cursor: grab;
-  }
-  
-  .main-image-container img:active {
-    cursor: grabbing;
-  }
-  
-.main-image-container {
-    width: auto;
+
+  .main-image-container {
+    max-width: fit-content;
     height: 70vh;
     min-width: 50vw;
     padding: 2px;
@@ -37,7 +22,16 @@ $theme_color:#43a0b2;
     align-items: center;
     @extend .img_border
   }
-  .thumbnail_img__container{
+
+  .main-image-container img {
+    transition: transform 0.3s ease;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    cursor: grab;
+  }
+
+  .thumbnail_img__container {
     height: 120px;
     min-width: 120px;
     background-color: #fff;
@@ -48,90 +42,68 @@ $theme_color:#43a0b2;
     align-items: center;
     cursor: pointer;
     margin-right: 10px;
+
     &:hover {
-      opacity: 0.7;
+      @extend .thumbnail_active
     }
+
     @extend .img_border
   }
-  .img_border{
+
+  .img_border {
     border: 2px dotted #6c757d4f;
   }
-  .thumbnail_active{
+
+  .thumbnail_active {
     border: 2px solid $theme_color;
   }
-  .thumbnail_img{
-    transition: transform 0.3s ease; /* Smooth transition for transformations */
+
+  .thumbnail_img {
+    transition: transform 0.3s ease;
     max-width: 100%;
     max-height: 100%;
-    object-fit: contain; 
+    object-fit: contain;
   }
-  
-  .main-image-container img {
-    transition: transform 0.3s ease; /* Smooth transition for transformations */
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* Ensures the image maintains aspect ratio */
-  }
-  
+
   .material-icons {
     font-size: 30px;
     cursor: pointer;
   }
-  
-  .prev-icon, .next-icon .upload-icon{
+
+  .prev-icon,
+  .next-icon .upload-icon {
     font-size: 3rem;
     color: $theme_color;
   }
-  
-  // .thumbnail-gallery {
-  //   img {
-  //     width: 100px;
-  //     height: auto;
-  //     cursor: pointer;
-  //     &:hover {
-  //       opacity: 0.7;
-  //     }
-  //   }
-  // }
-  .action-button {
-    background-color: #fff;
-    border-radius: 50%;
-    border: 1px solid #ddd;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    &:hover {
-      background-color: $theme_color !important;
-      color: #fff;
-    }
-  }
 
-  .main-image-container {
-    position: relative;
-  }
-  
   .grid-overlay {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background: repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 1px,
-      rgba(0, 0, 0, 0.2) 1px,
-      rgba(0, 0, 0, 0.2) 40px /* Larger grid line size */
-    ),
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 1px,
-      rgba(0, 0, 0, 0.2) 1px,
-      rgba(0, 0, 0, 0.2) 40px /* Larger grid line size */
-    );
+    background: repeating-linear-gradient(0deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.2) 1px,
+        rgba(0, 0, 0, 0.2) 40px),
+      repeating-linear-gradient(90deg,
+        transparent,
+        transparent 1px,
+        rgba(0, 0, 0, 0.2) 1px,
+        rgba(0, 0, 0, 0.2) 40px);
     pointer-events: none;
   }
-  
+
+  .image-upload-container {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    max-width: 90%;
+    display: flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+}

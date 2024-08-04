@@ -1,113 +1,102 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { DraggableDirective } from '../../directives/draggable.directive';
+import { ImageTransformationControlsComponent } from "../image-transition-controls/image-transition-controls/image-transformation-controls.component";
+import { ImageTransformationConfigurations } from '../../interfaces/image-viewer-common-interfaces';
 
 
 @Component({
   selector: 'app-image-viewer',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, DraggableDirective],
+  imports: [CommonModule, MatIconModule, MatButtonModule, DraggableDirective, ImageTransformationControlsComponent],
   templateUrl: './image-viewer.component.html',
   styleUrls: ['./image-viewer.component.scss']
 })
 export class ImageViewerComponent {
+  /** Active image index */
+  public currentImageIndex: number = 0;
+  /** Flag to determine if grid lines need to be shown*/
+  public showGrid: boolean = false;
+  /** Uploaded images */
+  public imagePreviews: (string | ArrayBuffer | null)[] = [];
+  /** Image transformation configurations */
+  public tansformConfig: ImageTransformationConfigurations = {
+    showGridLines: false,
+    transformationStyle:
+      `scale(1) rotate(0}deg)`
+  }
 
-  actions = [
-    { icon: 'zoom_in', action: 'zoomIn' },
-    { icon: 'zoom_out', action: 'zoomOut' },
-    { icon: 'grid_on', action: 'toggleGrid' },
-    { icon: 'rotate_left', action: 'rotateLeft90' },
-    { icon: 'rotate_left', action: 'rotateLeft1' },
-    { icon: 'rotate_right', action: 'rotateRight1' },
-    { icon: 'rotate_right', action: 'rotateRight90' },
-    { icon: 'flip', action: 'flipHorizontal' },
-    { icon: 'flip_to_front', action: 'flipVertical' },
-    { icon: 'restore', action: 'resetImage' }
-  ];
-  currentIndex: number = 0;
-  scale: number = 1;
-  rotate: number = 0;
-  flipH: boolean = false;
-  flipV: boolean = false;
-  currentImageIndex: number = 0;
-  showGrid: boolean = false;
-  imagePreviews: (string | ArrayBuffer | null)[] = [];
+
   @ViewChild('uploadImageInput') uploadImageInput!: ElementRef<HTMLInputElement>;
-  triggerUploadImage(): void {
+  @ViewChild('imageContainer') imageContainer!: ElementRef<HTMLDivElement>;
+
+  /** 
+   * This method is trigger upload image input on click of Upload image thumbnail
+   */
+  public triggerUploadImage(): void {
     this.uploadImageInput.nativeElement.click();
   }
-  previousImage() {
+  
+  /** 
+ * Navigates to the previous image in the list.
+ */
+  public previousImage() {
     this.currentImageIndex = (this.currentImageIndex > 0) ? this.currentImageIndex - 1 : this.imagePreviews.length - 1;
   }
 
-  nextImage() {
+  /** 
+   * Navigates to the next image in the list.
+   */
+  public nextImage() {
     this.currentImageIndex = (this.currentImageIndex < this.imagePreviews.length - 1) ? this.currentImageIndex + 1 : 0;
   }
 
-  setImage(index: number) {
+  /**
+   * Set index of current image upon clicking thumbnail
+   * @param index 
+   */
+  public setImage(index: number): void {
     this.currentImageIndex = index;
   }
 
-  performAction(action: { icon: string, action: string }) {
-    switch (action.action) {
-      case 'zoomIn':
-        this.scale = Math.min(3, this.scale + 0.1); // Limit zoom in
-        break;
-      case 'zoomOut':
-        this.scale = Math.max(0.1, this.scale - 0.1); // Limit zoom out
-        break;
-      case 'rotateLeft90':
-        this.rotate -= 90;
-        break;
-      case 'rotateLeft1':
-        this.rotate -= 1;
-        break;
-      case 'rotateRight1':
-        this.rotate += 1;
-        break;
-      case 'rotateRight90':
-        this.rotate += 90;
-        break;
-      case 'flipHorizontal':
-        this.flipH = !this.flipH;
-        break;
-      case 'flipVertical':
-        this.flipV = !this.flipV;
-        break;
-        case 'toggleGrid':
-          this.showGrid = !this.showGrid; // Toggle grid visibility
-          break;
-      case 'resetImage':
-        this.resetTransformations();
-        break;
-      default:
-        console.log(`Unknown action: ${action.action}`);
+  /**
+   * Method is invoked on file change
+   * @param event 
+   */
+  public onFileSelected(event: Event): void {
+    const files = (event.target as HTMLInputElement).files;
+    if (files) {
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = () => {
+          this.imagePreviews.push(reader.result);
+        };
+        reader.readAsDataURL(file);
+      });
     }
   }
 
-  private resetTransformations() {
-    this.scale = 1;
-    this.rotate = 0;
-    this.flipH = false;
-    this.flipV = false;
+  /**
+   * Method is to set transformation style according to the event send from children
+   * @param event 
+   */
+  public setTransformStyle(event: any) {
+    this.tansformConfig = event;
   }
 
-  get transformStyle() {
-    let transform = `scale(${this.scale}) rotate(${this.rotate}deg)`;
-    if (this.flipH) transform += ' scaleX(-1)';
-    if (this.flipV) transform += ' scaleY(-1)';
-    return transform;
+  /**
+   * Method is to scroll to left
+   */
+  public scrollLeft(): void {
+    this.imageContainer.nativeElement.scrollBy({ left: -100, behavior: 'smooth' });
   }
-  onFileSelected(event: Event): void {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imagePreviews.push(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
+
+  /**
+   * Method is to scroll to right
+   */
+  public scrollRight(): void {
+    this.imageContainer.nativeElement.scrollBy({ left: 100, behavior: 'smooth' });
   }
 }

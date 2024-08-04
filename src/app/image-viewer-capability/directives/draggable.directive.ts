@@ -4,6 +4,7 @@ import { Directive, ElementRef, HostListener, Renderer2 } from '@angular/core';
   selector: '[appDraggable]',
   standalone: true
 })
+/** This directive is to make the element draggable */
 export class DraggableDirective {
   private isDragging = false;
   private startX = 0;

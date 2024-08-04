@@ -1,0 +1,17 @@
+$theme_color: #43a0b2;
+
+.action-button {
+  background-color: #fff;
+  border-radius: 50%;
+  border: 1px solid #ddd;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:hover {
+    background-color: $theme_color !important;
+    color: #fff;
+  }
+}

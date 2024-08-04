@@ -3,5 +3,5 @@ import { ImageViewerComponent } from './image-viewer-capability/components/image
 
 
 export const routes: Routes = [
-    {path:'',component:ImageViewerComponent}
+    { path: '', component: ImageViewerComponent }
 ];
